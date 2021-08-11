@@ -20,10 +20,11 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.STRING,
     image_type: DataTypes.STRING,
     image_name: DataTypes.STRING,
-    image_data: DataTypes.BLOB
+    image_data: DataTypes.BLOB,
+    image_path: DataTypes.STRING,
   }, {
     sequelize,
-    modelName: 'Products',
+    freezeTableName: true
   });
   return Products;
 };

@@ -2,6 +2,7 @@
 
 # dependencies
 node_modules
+images
 node_modules/
 /config/config.json
 .sequelizerc
