@@ -6,6 +6,7 @@ const morgan = require('morgan')
 const productRoutes = require('./routes/productRoutes')
 const uploadRoutes = require('./routes/uploadRoutes')
 const adminRoutes = require('./routes/adminRoutes')
+const apiErrorHandler = require('./utils/api-error-handler')
 
 dotenv.config()
 
@@ -27,6 +28,8 @@ app.get('/', (req, res) => { res.send('Hello World!') })
 app.use('/products', productRoutes)
 app.use('/upload', uploadRoutes)
 app.use('/admin', adminRoutes)
+
+app.use(apiErrorHandler)
 
 const PORT = process.env.PORT || 5000
 

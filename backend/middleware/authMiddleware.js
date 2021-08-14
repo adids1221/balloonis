@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const { User } = require('../models')
-const bcrypt = require('bcryptjs');
+const AppError = require('../utils/appError')
+
 const protect = async (req, res, next) => {
     let token
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
@@ -16,17 +17,15 @@ const protect = async (req, res, next) => {
                 req.user = user
                 next()
             }
-
         } catch (error) {
-            console.error(error)
-            res.status(401)
-            throw new Error('Not authorized, token failed')
+            next(AppError.badRequest('Not authorized, token failed'))
+            return;
         }
     }
 
     if (!token) {
-        res.status(401)
-        throw new Error('not authorized, no token!')
+        next(AppError.badRequest('Not authorized, no token!'))
+        return;
     }
 }
 
@@ -35,8 +34,8 @@ const isAdmin = (req, res, next) => {
     if (user.id && user.is_admin) {
         next()
     } else {
-        res.status(401)
-        throw new Error('Not authorized as an admin')
+        next(AppError.badRequest('Not authorized as an admin'))
+        return;
     }
 }
 

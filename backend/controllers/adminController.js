@@ -2,11 +2,12 @@ const { User } = require('../models')
 const { generateToken } = require('../utils/generateToken')
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcryptjs');
+const AppError = require('../utils/appError');
 
 // @route    POST api/users/login
 // @desc     Auth user & get token
 // @access   Public
-const authUser = async (req, res) => {
+const authUser = async (req, res, next) => {
     const { username, password } = req.body
     let cur_user
     const user = await User.findAll({
@@ -23,11 +24,10 @@ const authUser = async (req, res) => {
     const token = generateToken(cur_user.id)
 
     if (!validPassword) {
-        return res.status(401).json("Invalid Credential");
+        next(AppError.badRequest("Invalid Credential"))
+        return;
     }
-    else {
-        return res.status(200).json({ token });
-    }
+    return res.status(200).json({ token });
 }
 
 // @route    POST api/users
@@ -35,8 +35,8 @@ const authUser = async (req, res) => {
 // @access   Public
 const registerUser = async (req, res, next) => {
     const { username, password } = req.body
-    const uuid = uuidv4() //generate id by myself?
-    const salt = await bcrypt.genSalt(10);
+    const uuid = uuidv4()
+    const salt = await bcrypt.genSalt(10)
     const bcryptPassword = await bcrypt.hash(password, salt);
 
     const user = await User.findAll({
@@ -45,16 +45,16 @@ const registerUser = async (req, res, next) => {
 
     user.forEach(u => {
         if (u.user_name === username) {
-            res.status(400)
-            throw new Error('User already exists')
+            next(AppError.badRequest('User already exists'))
+            return;
         }
     })
 
     await User.create({ id: uuid, user_name: username, password: bcryptPassword, is_admin: true })
         .then(res.status(201).send({ message: "User created" }))
         .catch((error) => {
-            console.log(error);
-            res.status(400).send(error);
+            next(AppError.badRequest(error.message))
+            return;
         });
 }
 
