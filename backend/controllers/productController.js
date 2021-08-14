@@ -1,8 +1,5 @@
-import Sequelize from "sequelize";
-// import { createRequire } from "module";
-// const require = createRequire(import.meta.url);
-// const Product = require("../models/products.cjs");
-import Product from "../models/products.cjs"
+const Sequelize = require("sequelize");
+const { Product } = require("../models/products")
 
 const createProduct = async (req, res) => {
     try {
@@ -42,4 +39,6 @@ const getProduct = async (req, res) => {
     }
 };
 
-export { createProduct, getProduct }
+
+exports.createProduct = createProduct
+exports.getProduct = getProduct

@@ -1,10 +1,11 @@
-import express from 'express'
-import dotenv from 'dotenv'
-import cors from 'cors'
-import db from './config/db.js'
-import morgan from 'morgan'
-import productRoutes from './routes/productRoutes.js'
-import uploadRoutes from './routes/uploadRoutes.js'
+const express = require('express')
+const dotenv = require('dotenv')
+const cors = require('cors')
+const db = require('./config/db')
+const morgan = require('morgan')
+const productRoutes = require('./routes/productRoutes')
+const uploadRoutes = require('./routes/uploadRoutes')
+const adminRoutes = require('./routes/adminRoutes')
 
 dotenv.config()
 
@@ -25,6 +26,7 @@ if (process.env.NODE_ENV === 'development') {
 app.get('/', (req, res) => { res.send('Hello World!') })
 app.use('/products', productRoutes)
 app.use('/upload', uploadRoutes)
+app.use('/admin', adminRoutes)
 
 const PORT = process.env.PORT || 5000
 
