@@ -23,7 +23,7 @@ const authUser = async (req, res, next) => {
     })
 
     if (!cur_id || !cur_password) {
-        next(AppError.internal("Invalid Credential"))
+        next(AppError.badRequest("Invalid Credential"))
         return;
     }
 
@@ -31,7 +31,7 @@ const authUser = async (req, res, next) => {
     const token = generateToken(cur_id)
 
     if (!validPassword) {
-        next(AppError.internal("Invalid Credential"))
+        next(AppError.badRequest("Invalid Credential"))
         return;
     }
     return res.status(200).json({ token, username });

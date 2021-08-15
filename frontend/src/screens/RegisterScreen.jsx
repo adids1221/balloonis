@@ -1,80 +1,91 @@
-// import React, { useState, useEffect } from "react";
-// import Spinner from "../components/Spinner";
-// import Message from "../components/Message";
-// import { Form, Button } from "react-bootstrap";
-// import { useDispatch, useSelector } from "react-redux";
-// // import { register } from "../actions/authActions";
-// import FormContainer from "../components/FormContainer";
+import React, { Fragment, useState, useEffect } from "react";
+import Spinner from "../components/Spinner";
+import Message from "../components/Message";
+import NotFound from "../components/NotFound";
+import { Form, Button } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../actions/authActions";
+import FormContainer from "../components/FormContainer";
 
-// const RegisterScreen = ({ location, history }) => {
-//   const [username, setUsername] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [confirmPassword, setConfirmPassword] = useState("");
-//   const [message, setMessage] = useState(null);
+const RegisterScreen = ({ location, history }) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState(null);
 
-//   const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-//   const userRegister = useSelector((state) => state.userRegister);
-//   const { loading, error, userInfo } = userRegister;
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
 
-//   const redirect = location.search ? location.search.split("=")[1] : "/";
+  const userRegister = useSelector((state) => state.userRegister);
+  const { loading, error } = userRegister;
+  const registerUser = userRegister.userInfo;
 
-//   useEffect(() => {
-//     if (userInfo) {
-//       history.push(redirect);
-//     }
-//   }, [history, userInfo, redirect]);
+  const redirect = location.search ? location.search.split("=")[1] : "/";
 
-//   const submitHandler = (e) => {
-//     e.preventDefault();
-//     if (password !== confirmPassword) {
-//       setMessage("Passwords do not match");
-//     } else {
-//       dispatch(register(username, password));
-//     }
-//   };
+  useEffect(() => {
+    if (registerUser) {
+      history.push(redirect);
+    }
+  }, [history, registerUser, redirect]);
 
-//   return (
-//     <FormContainer>
-//       <h1>Sign Up</h1>
-//       {message && <Message variant='danger'>{message}</Message>}
-//       {error && <Message variant='danger'>{error}</Message>}
-//       {loading && <Spinner />}
-//       <Form onSubmit={submitHandler}>
-//         <Form.Group controlId='username'>
-//           <Form.Label>User Name</Form.Label>
-//           <Form.Control
-//             type='name'
-//             placeholder='Enter username'
-//             value={username}
-//             onChange={(e) => setUsername(e.target.value)}
-//           ></Form.Control>
-//         </Form.Group>
-//         <Form.Group controlId='password'>
-//           <Form.Label>Password</Form.Label>
-//           <Form.Control
-//             type='password'
-//             placeholder='Enter password'
-//             value={password}
-//             onChange={(e) => setPassword(e.target.value)}
-//           ></Form.Control>
-//         </Form.Group>
-//         <Form.Group controlId='confirmPassword'>
-//           <Form.Label>Confirm Password</Form.Label>
-//           <Form.Control
-//             type='password'
-//             placeholder='Confirm password'
-//             value={confirmPassword}
-//             onChange={(e) => setConfirmPassword(e.target.value)}
-//           ></Form.Control>
-//         </Form.Group>
+  const submitHandler = (e) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      setMessage("Passwords do not match");
+    } else {
+      dispatch(register(username, password));
+    }
+  };
 
-//         <Button className='mt-3' type='submit' variant='primary'>
-//           Register
-//         </Button>
-//       </Form>
-//     </FormContainer>
-//   );
-// };
+  return (
+    <Fragment>
+      {userInfo ? (
+        <FormContainer>
+          <h1>Sign Up</h1>
+          {message && <Message variant='danger'>{message}</Message>}
+          {error && <Message variant='danger'>{error}</Message>}
+          {loading && <Spinner />}
+          <Form onSubmit={submitHandler}>
+            <Form.Group controlId='username'>
+              <Form.Label>User Name</Form.Label>
+              <Form.Control
+                type='name'
+                placeholder='Enter username'
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+            <Form.Group controlId='password'>
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type='password'
+                placeholder='Enter password'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
+            <Form.Group controlId='confirmPassword'>
+              <Form.Label>Confirm Password</Form.Label>
+              <Form.Control
+                type='password'
+                placeholder='Confirm password'
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              ></Form.Control>
+            </Form.Group>
 
-// export default RegisterScreen;
+            <Button className='mt-3' type='submit' variant='primary'>
+              Register
+            </Button>
+          </Form>
+        </FormContainer>
+      ) : (
+        <NotFound />
+      )}
+    </Fragment>
+  );
+};
+
+export default RegisterScreen;

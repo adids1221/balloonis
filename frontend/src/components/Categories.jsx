@@ -1,19 +1,18 @@
 import React from "react";
 import { Card, Container, Image, Button } from "react-bootstrap";
 
-const Categories = ({ item }) => {
+const Categories = ({ cat }) => {
   return (
     <Card className='my-3 ml-3 py-3 rounded' style={{ width: "16rem" }}>
-      <Card.Img variant='top' />
       <Card.Body>
         <Card.Title>
-          {item ? <strong>{item.name}</strong> : <strong>מוצר</strong>}
+          {cat ? <strong>{cat.name}</strong> : <strong>קטגוריה</strong>}
         </Card.Title>
-        <Card.Text>
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
-        </Card.Text>
-        <Button variant='primary'>Go somewhere</Button>
+        <Card.Img variant='top' />
+        <Button variant='primary'>
+          {" "}
+          {cat ? <strong>{cat.name}</strong> : <strong>קטגוריה</strong>}
+        </Button>
       </Card.Body>
     </Card>
   );
