@@ -9,25 +9,32 @@ const AppError = require('../utils/appError');
 // @access   Public
 const authUser = async (req, res, next) => {
     const { username, password } = req.body
-    let cur_user
+    let cur_password
+    let cur_id
     const user = await User.findAll({
         where: { user_name: username }
     })
 
     user.forEach(u => {
         if (u.user_name === username) {
-            cur_user = u;
+            cur_password = u.password;
+            cur_id = u.id
         }
     })
 
-    const validPassword = bcrypt.compare(password, cur_user.password)
-    const token = generateToken(cur_user.id)
-
-    if (!validPassword) {
-        next(AppError.badRequest("Invalid Credential"))
+    if (!cur_id || !cur_password) {
+        next(AppError.internal("Invalid Credential"))
         return;
     }
-    return res.status(200).json({ token });
+
+    const validPassword = bcrypt.compare(password, cur_password)
+    const token = generateToken(cur_id)
+
+    if (!validPassword) {
+        next(AppError.internal("Invalid Credential"))
+        return;
+    }
+    return res.status(200).json({ token, username });
 }
 
 // @route    POST api/users

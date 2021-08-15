@@ -1,8 +1,10 @@
 import React, { Fragment } from "react";
 import { Navbar, Nav, NavDropdown, Container } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-
+import { useSelector } from "react-redux";
 const Navigationbar = () => {
+  const userLogin = useSelector((state) => state.userLogin);
+  const { loading, error, userInfo } = userLogin;
   return (
     <Fragment>
       <Navbar bg='light' expand='md' className='me-auto pl-0'>
@@ -29,6 +31,20 @@ const Navigationbar = () => {
               </LinkContainer>
             </Nav>
           </Navbar.Collapse>
+          {userInfo && (
+            <Navbar.Collapse id='basic-navbar-nav'>
+              <Nav className='me-auto'>
+                <NavDropdown
+                  title={userInfo.username.toUpperCase()}
+                  id='basic-nav-dropdown'
+                >
+                  <LinkContainer to='ballones'>
+                    <NavDropdown.Item>בלונים</NavDropdown.Item>
+                  </LinkContainer>
+                </NavDropdown>
+              </Nav>
+            </Navbar.Collapse>
+          )}
         </Container>
       </Navbar>
     </Fragment>

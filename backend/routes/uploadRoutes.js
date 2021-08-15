@@ -2,7 +2,7 @@
 // import multer from "multer"
 // import path from 'path'
 // const router = express.Router()
-
+const { createProduct } = require('../controllers/productController')
 const express = require('express')
 const { Router } = require("express");
 const router = Router();
@@ -46,7 +46,11 @@ const upload = multer({ dest: 'images/' })
 
 //create new product
 router.route('/')
-    .post(upload.array('images'), (req, res) => {
+    .post(upload.array('images'), createProduct)
+
+module.exports = router;
+
+/*(req, res) => {
         var images = req.files
         images.forEach((image) => {
             console.log(image);
@@ -55,6 +59,4 @@ router.route('/')
         res.json({
             message: 'done'
         });
-    })
-
-module.exports = router;
+    } */
