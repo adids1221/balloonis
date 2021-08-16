@@ -11,6 +11,7 @@ const authUser = async (req, res, next) => {
     const { username, password } = req.body
     let cur_password
     let cur_id
+    let is_admin
     const user = await User.findAll({
         where: { user_name: username }
     })
@@ -19,6 +20,7 @@ const authUser = async (req, res, next) => {
         if (u.user_name === username) {
             cur_password = u.password;
             cur_id = u.id
+            is_admin = u.is_admin
         }
     })
 
@@ -34,7 +36,7 @@ const authUser = async (req, res, next) => {
         next(AppError.badRequest("Invalid Credential"))
         return;
     }
-    return res.status(200).json({ token, username });
+    return res.status(200).json({ token, username, is_admin });
 }
 
 // @route    POST api/users

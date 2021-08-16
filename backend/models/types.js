@@ -11,10 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.hasMany(models.Products)
     }
   };
   Types.init({
-    name: DataTypes.STRING
+    name: DataTypes.STRING,
+    image: DataTypes.BLOB,
   }, {
     sequelize,
     freezeTableName: true

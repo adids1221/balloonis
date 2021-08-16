@@ -11,11 +11,20 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.hasOne(models.Types, {
+        foreignKey: 'id',
+      })
     }
   };
   Products.init({
     name: DataTypes.STRING,
-    product_type: DataTypes.INTEGER,
+    product_type: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'Type',
+        key: 'id'
+      }
+    },
     price: DataTypes.DOUBLE,
     description: DataTypes.STRING,
     image_type: DataTypes.STRING,

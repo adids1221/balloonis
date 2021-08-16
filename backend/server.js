@@ -4,6 +4,7 @@ const cors = require('cors')
 const db = require('./config/db')
 const morgan = require('morgan')
 const productRoutes = require('./routes/productRoutes')
+const categoryRoutes = require('./routes/categoryRoutes')
 const uploadRoutes = require('./routes/uploadRoutes')
 const adminRoutes = require('./routes/adminRoutes')
 const apiErrorHandler = require('./utils/api-error-handler')
@@ -26,6 +27,7 @@ if (process.env.NODE_ENV === 'development') {
 
 app.get('/', (req, res) => { res.send('Hello World!') })
 app.use('/products', productRoutes)
+app.use('/categories', categoryRoutes)
 app.use('/upload', uploadRoutes)
 app.use('/admin', adminRoutes)
 

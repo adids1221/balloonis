@@ -1,7 +1,3 @@
-// import express from 'express'
-// import multer from "multer"
-// import path from 'path'
-// const router = express.Router()
 const { createProduct } = require('../controllers/productController')
 const express = require('express')
 const { Router } = require("express");
@@ -11,6 +7,10 @@ const path = require("path")
 
 const upload = multer({ dest: 'images/' })
 
+router.route('/')
+    .post(upload.array('images'))
+
+module.exports = router;
 // const storage = multer.diskStorage({
 //     destination(req, file, cb) {
 //         cb(null, 'images/')
@@ -45,18 +45,3 @@ const upload = multer({ dest: 'images/' })
 
 
 //create new product
-router.route('/')
-    .post(upload.array('images'), createProduct)
-
-module.exports = router;
-
-/*(req, res) => {
-        var images = req.files
-        images.forEach((image) => {
-            console.log(image);
-        })
-
-        res.json({
-            message: 'done'
-        });
-    } */
